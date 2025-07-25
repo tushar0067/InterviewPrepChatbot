@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Code Instructor - Modern UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+            color: #e2e8f0; /* Slate 200 */
+        }
+        .sidebar {
+            transition: width 0.3s ease;
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: #334155; /* Slate 700 */
+            color: #ffffff;
+        }
+        .chat-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-container::-webkit-scrollbar-track {
+            background: #1e293b; /* Slate 800 */
+        }
+        .chat-container::-webkit-scrollbar-thumb {
+            background: #475569; /* Slate 600 */
+            border-radius: 3px;
+        }
+        .chat-container::-webkit-scrollbar-thumb:hover {
+            background: #64748b; /* Slate 500 */
+        }
+        .btn-glow:hover {
+            box-shadow: 0 0 15px 5px rgba(37, 99, 235, 0.4);
+        }
+        .loader {
+            border: 4px solid #475569; /* Slate 600 */
+            border-top: 4px solid #3b82f6; /* Blue 500 */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="flex h-screen bg-slate-900">
+
+    <!-- Sidebar -->
+    <aside class="sidebar w-64 bg-slate-800/50 backdrop-blur-sm flex flex-col p-4 border-r border-slate-700">
+        <div class="flex items-center gap-3 mb-8">
+            <i class="fas fa-terminal text-2xl text-blue-500"></i>
+            <h1 class="text-xl font-bold text-white">DSA Pro</h1>
+        </div>
+        <nav class="flex flex-col gap-2">
+            <a href="#" class="sidebar-link flex items-center gap-3 p-3 rounded-lg transition-colors">
+                <i class="fas fa-tachometer-alt w-5 text-center"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="sidebar-link flex items-center gap-3 p-3 rounded-lg transition-colors">
+                <i class="fas fa-history w-5 text-center"></i>
+                <span>History</span>
+            </a>
+            <a href="#" class="sidebar-link active flex items-center gap-3 p-3 rounded-lg transition-colors">
+                <i class="fas fa-laptop-code w-5 text-center"></i>
+                <span>Playground</span>
+            </a>
+            <a href="#" class="sidebar-link flex items-center gap-3 p-3 rounded-lg transition-colors">
+                <i class="fas fa-cog w-5 text-center"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+        <div class="mt-auto">
+             <div class="p-4 bg-slate-700/50 rounded-lg">
+                <h3 class="font-bold text-white">Upgrade to Pro</h3>
+                <p class="text-sm text-slate-400 mt-1 mb-3">Get unlimited access to all features.</p>
+                <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors">Upgrade</button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col">
+        <div class="w-full max-w-4xl mx-auto flex flex-col h-full p-4">
+             <!-- Header -->
+            <div class="p-4 text-center mb-4">
+                <h1 class="text-3xl font-bold text-white">🤖 DSA Code Instructor</h1>
+                <p class="text-md text-slate-400">Your AI-powered guide to Data Structures & Algorithms</p>
+            </div>
+            <div class="bg-slate-800/50 backdrop-blur-sm rounded-2xl shadow-2xl flex flex-col flex-1">
+                <!-- Chat Area -->
+                <div id="chat-container" class="flex-1 p-6 overflow-y-auto chat-container space-y-4">
+                    <!-- Initial Welcome Message -->
+                    <div class="flex items-start gap-3">
+                        <div class="bg-blue-600 p-2 rounded-full flex-shrink-0">
+                            <i class="fas fa-robot text-white"></i>
+                        </div>
+                        <div class="bg-slate-700 rounded-lg p-3 max-w-lg">
+                            <p class="text-sm">Hello! I am your DSA Instructor. Ask me anything about data structures and algorithms. But don't you dare ask me anything else, or you'll see my rude side!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div class="p-4 border-t border-slate-700">
+                    <div class="flex items-center gap-3 bg-slate-700/50 rounded-lg p-2">
+                        <textarea id="userInput" class="flex-1 bg-transparent text-white focus:outline-none resize-none p-2" rows="1" placeholder="Ask about arrays, graphs, sorting..."></textarea>
+                        <button id="sendButton" class="bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-800 transition-all duration-300 btn-glow">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        const sendButton = document.getElementById('sendButton');
+        const userInput = document.getElementById('userInput');
+        const chatContainer = document.getElementById('chat-container');
+
+        // --- Simulated Gemini API Call ---
+        async function getGeminiResponse(prompt) {
+            const isDSARelated = /array|list|stack|queue|tree|graph|sort|search|algorithm|big o|complexity|data structure|hash|map|heap/i.test(prompt);
+
+            if (isDSARelated) {
+                return `Of course! Let's dive into **${prompt}**. It's a crucial topic. For example, a topological sort of a directed acyclic graph (DAG) is a linear ordering of its vertices where for every directed edge from vertex u to v, u comes before v. This is incredibly useful for scheduling tasks with dependencies, like a course prerequisite list. We can use algorithms like Kahn's (which uses in-degrees) or a DFS-based approach. Which one piques your interest for a code walkthrough?`;
+            } else {
+                return "Are you serious? You're wasting my time with this junk. I'm a highly specialized DSA instructor. Ask me about B-trees or Dijkstra's algorithm, not this irrelevant nonsense! Get your priorities straight!";
+            }
+        }
+
+        // --- Chat Handling Logic ---
+        async function handleUserRequest() {
+            const userText = userInput.value.trim();
+            if (!userText) return;
+
+            appendMessage(userText, 'user');
+            userInput.value = '';
+            userInput.style.height = 'auto';
+
+            appendMessage('', 'ai', true); // Show loader
+
+            try {
+                // Simulate a small delay for better UX
+                await new Promise(resolve => setTimeout(resolve, 500));
+                const aiResponse = await getGeminiResponse(userText);
+                updateLastMessage(aiResponse);
+            } catch (error) {
+                console.error("Error fetching AI response:", error);
+                updateLastMessage("My circuits are a bit fuzzy. Something went wrong. Please try again.");
+            }
+        }
+        
+        function appendMessage(text, sender, isLoading = false) {
+            const messageWrapper = document.createElement('div');
+            const messageBubble = document.createElement('div');
+            
+            if (sender === 'user') {
+                messageWrapper.className = 'flex items-start gap-3 justify-end';
+                messageBubble.className = 'bg-blue-600 text-white rounded-lg p-3 max-w-lg';
+                messageBubble.innerHTML = `<p class="text-sm">${text}</p>`;
+            } else { // AI
+                messageWrapper.className = 'flex items-start gap-3';
+                const icon = document.createElement('div');
+                icon.className = 'bg-slate-600 p-2 rounded-full flex-shrink-0';
+                icon.innerHTML = `<i class="fas fa-robot text-white"></i>`;
+                messageWrapper.appendChild(icon);
+                
+                messageBubble.className = 'bg-slate-700 rounded-lg p-3 max-w-lg';
+                if (isLoading) {
+                    messageBubble.innerHTML = '<div class="loader"></div>';
+                } else {
+                    messageBubble.innerHTML = `<p class="text-sm">${text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p>`;
+                }
+            }
+            
+            messageWrapper.appendChild(messageBubble);
+            chatContainer.appendChild(messageWrapper);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function updateLastMessage(text) {
+            const lastMessageBubble = chatContainer.querySelector('.flex.items-start.gap-3:last-child .bg-slate-700');
+            if (lastMessageBubble) {
+                lastMessageBubble.innerHTML = `<p class="text-sm">${text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p>`;
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        }
+
+        sendButton.addEventListener('click', handleUserRequest);
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleUserRequest();
+            }
+        });
+
+        // Auto-resize textarea
+        userInput.addEventListener('input', () => {
+            userInput.style.height = 'auto';
+            const scrollHeight = userInput.scrollHeight;
+            const maxHeight = 120; // 3rem * 5 lines approx
+            if (scrollHeight > maxHeight) {
+                userInput.style.overflowY = 'auto';
+                userInput.style.height = maxHeight + 'px';
+            } else {
+                userInput.style.overflowY = 'hidden';
+                userInput.style.height = scrollHeight + 'px';
+            }
+        });
+
+        // Sidebar active link handler
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                sidebarLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
