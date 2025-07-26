@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom/client';
-import History from './History.js';
-import Dashboard from './Dashboard.js';
-import Settings from './Settings.js';
-import About from './About.js';
+import Settings from './Setting';
+import Dashboard from './Dashboard';
+import History from './Histroy';
+import About from './About';
 
 // --- Helper Components ---
 const Typewriter = ({ text, onComplete, chatContainerRef }) => {
