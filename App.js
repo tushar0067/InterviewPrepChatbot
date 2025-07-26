@@ -69,7 +69,7 @@ function App() {
 
     // --- API Configuration ---
     // FIX: API key is now loaded securely from an environment variable
-    const API_KEY = process.env.GEMINI_API_KEY;
+    const API_KEY = process.env.REACT_APP_GEMINI_API_KEY;;
     const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
     const SYSTEM_INSTRUCTION = `You are a  Interview Preparation Coach . You have to only answer correctly to any interview  related problem only like  'Practice behavioral questions with feedback.
 System design whiteboarding sessions.
