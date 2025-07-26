@@ -1,18 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom/client';
-import History from './Histroy';
-import Dashboard from './Dashboard';
-import Settings from './Setting';
-import About from './About';
-
-
+import History from './History.js';
+import Dashboard from './Dashboard.js';
+import Settings from './Settings.js';
+import About from './About.js';
 
 // --- Helper Components ---
 const Typewriter = ({ text, onComplete, chatContainerRef }) => {
     const [displayedText, setDisplayedText] = useState('');
     const fullText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
 
-    // This effect handles the scrolling whenever the displayed text changes
     useEffect(() => {
         if (chatContainerRef.current) {
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -43,7 +40,7 @@ const Typewriter = ({ text, onComplete, chatContainerRef }) => {
         };
     }, [fullText, onComplete]);
 
-    return <p className="text-sm" dangerouslySetInnerHTML={{ __html: displayedText }} />;
+    return <p classNamee="text-sm" dangerouslySetInnerHTML={{ __html: displayedText }} />;
 };
 
 // --- Main App Component ---
@@ -71,7 +68,8 @@ function App() {
 
 
     // --- API Configuration ---
-    const API_KEY = "AIzaSyDLwpaw_PLeI5BJonkkfLQaXBYmXRhvazA"; // <--- PASTE YOUR KEY. DO NOT SHARE.
+    // FIX: API key is now loaded securely from an environment variable
+    const API_KEY = process.env.GEMINI_API_KEY;
     const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
     const SYSTEM_INSTRUCTION = `You are a  Interview Preparation Coach . You have to only answer correctly to any interview  related problem only like  'Practice behavioral questions with feedback.
 System design whiteboarding sessions.
@@ -209,7 +207,7 @@ Tracks user progress + gives custom advice.' and you can answer naming problem l
         const userText = userInput.trim();
         if (!userText || isLoading) return;
         if (!API_KEY) {
-            setChatHistory(prev => [...prev, { role: 'ai', text: "ERROR: API key is missing. Please add your API key in the React component to enable live responses." }]);
+            setChatHistory(prev => [...prev, { role: 'ai', text: "ERROR: API key is missing. Please create a .env file and add your API key to enable live responses." }]);
             return;
         }
         
@@ -314,7 +312,7 @@ Tracks user progress + gives custom advice.' and you can answer naming problem l
             <aside className={`sidebar fixed top-0 left-0 h-full ${currentTheme.sidebarBg} backdrop-blur-sm flex flex-col p-4 border-r ${currentTheme.headerBorder} transition-all duration-300 ${isSidebarCollapsed ? 'w-20' : 'w-64'}`}>
                 <div className={`sidebar-header flex items-center gap-3 mb-8 ${isSidebarCollapsed ? 'justify-center' : ''}`}>
                     <i className={`fas fa-terminal text-2xl ${currentTheme.icon}`}></i>
-                    {!isSidebarCollapsed && <h1 className={`sidebar-header-text text-xl font-bold ${currentTheme.sidebarText} whitespace-nowrap`}>Interview Prep</h1>}
+                    {!isSidebarCollapsed && <h1 className={`sidebar-header-text text-xl font-bold ${currentTheme.sidebarText} whitespace-nowrap`}>Interview Pro</h1>}
                 </div>
                 <nav className="flex flex-col gap-2">
                     {navLinks.map(link => (
@@ -389,7 +387,7 @@ Tracks user progress + gives custom advice.' and you can answer naming problem l
                                     </div>
                                 )}
                             </div>
-                            <div className={`p-4 border-t ${currentTheme.headerBorder} sticky bottom-0 ${currentTheme.chatBg}`}>
+                            <div className={`p-4 border-t ${currentTheme.headerBorder} ${currentTheme.chatBg} sticky bottom-0`}>
                                 {uploadedFileName && (
                                     <div className={`flex items-center justify-between ${currentTheme.contextBg} ${currentTheme.contextText} p-2 rounded-lg mb-2 text-sm`}>
                                         <div className="flex items-center gap-2 overflow-hidden">
@@ -407,7 +405,7 @@ Tracks user progress + gives custom advice.' and you can answer naming problem l
                                         </button>
                                     </div>
                                 )}
-                                <div className={`flex items-center gap-3  ${currentTheme.inputBg} rounded-lg p-2`}>
+                                <div className={`flex items-center gap-3 ${currentTheme.inputBg} rounded-lg p-2`}>
                                     <button
                                         className={`${currentTheme.secondaryIcon} p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600`}
                                         onClick={() => setIsFileUploaderOpen(true)}

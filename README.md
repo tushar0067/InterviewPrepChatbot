@@ -65,25 +65,33 @@ Install React, ReactDOM, and Parcel:
 npm install react react-dom parcel
 
 4. Configure package.json
-Open your package.json file and add the following start script:
+Open your package.json file and add the following start and build scripts:
 
 "scripts": {
-  "start": "parcel index.html",
+  "start": "parcel src/index.html",
+  "build": "parcel src/build index.html",
   "test": "echo \"Error: no test specified\" && exit 1"
 },
 
-5. Add Your API Key
-Open App.js and paste your Google Gemini API key into the API_KEY constant:
+5. Create .env for API Key
+Create a new file in your project's root directory named .env. Inside this file, add your API key like this (Parcel requires the PARCEL_ prefix):
 
-// App.js -> line 103
-const API_KEY = "YOUR_API_KEY_HERE"; // <--- PASTE YOUR KEY. DO NOT SHARE.
+PARCEL_GEMINI_API_KEY=YOUR_API_KEY_HERE
 
-6. Run the Application
+6. Create .gitignore
+Create another file named .gitignore in the root directory and add the following lines to it. This is a crucial step to ensure your secret key is not uploaded to GitHub.
+
+.env
+node_modules/
+dist/
+.parcel-cache/
+
+7. Run the Application
 You're all set! Start the development server by running:
 
 npm start
 
-Parcel will bundle the application and provide you with a local server address (usually http://localhost:1234). Open this link in your browser to see the app live.
+Parcel will bundle the application and provide you with a local server address (usually http://localhost:1234). Open this link in your browser to see the app live. For a production build, run npm run build.
 
 📁 File Structure
 The project is organized into modular components for better maintainability:
@@ -95,9 +103,10 @@ The project is organized into modular components for better maintainability:
 ├── 📄 Settings.js       # Component for the user settings page
 ├── 📄 About.js          # Component for the about page
 ├── 📄 index.html        # The entry point that loads the React app
-└── 📦 package.json       # Project configuration and dependencies
-
+├── 📄 .env              # Stores the secret API key (Do
+ 
 © Creator
 Built with passion by Tushar Gupta.
 
 © 2024 All Rights Reserved.
+
