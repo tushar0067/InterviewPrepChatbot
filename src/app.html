@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Code Instructor - React App</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    
+     
+
+    <!-- PDF.js for reading PDF content -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script>
+        // Set the worker source for pdf.js
+        if (window.pdfjsLib) {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js`;
+        }
+    </script>
+
+    <style>
+        /* Base styles for the application */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+        }
+        .chat-container::-webkit-scrollbar { width: 6px; }
+        .chat-container::-webkit-scrollbar-track { background: #1e293b; }
+        .chat-container::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+        .chat-container::-webkit-scrollbar-thumb:hover { background: #64748b; }
+        .btn-glow:hover { box-shadow: 0 0 15px 5px rgba(37, 99, 235, 0.4); }
+        .loader {
+        border: 3px solid rgba(255, 255, 255, 0.2);
+        border-top: 3px solid #fff;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+        to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- The entire React App will be mounted here -->
+    <div id="root"></div>
+
+    <!-- 
+      This script tag tells Parcel to start its bundling process with App.js
+    -->
+    <script type="module" src="../App.js"></script>
+</body>
+</html>
